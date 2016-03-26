@@ -14,6 +14,9 @@ LDFLAGS=-pthread
 
 OBJECTS=$(SOURCES:.c=.o)
 
+# extracted from https://github.com/torvalds/linux/blob/master/scripts/Lindent
+LINDENT=indent -npro -kr -i8 -ts8 -sob -l80 -ss -ncs -cp1 -il0
+
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
@@ -21,6 +24,12 @@ $(EXECUTABLE): $(OBJECTS)
 
 .c.o:
 	$(CC) -c $(CFLAGS) $^ -o $@
+
+tidy:
+	$(LINDENT) \
+		-T FILE \
+		-T size_t \
+		*.h *.c
 
 clean:
 	rm -rf *.o $(EXECUTABLE)

@@ -2,7 +2,7 @@
 #include <getopt.h>		/* if you don't hate getopt, you should */
 #include <stdlib.h>
 
-void _init_options(ts_options_t *options)
+void _init_options(ts_options_t * options)
 {
 	options->num_elements = 4;
 	options->element_max_value = 12;
@@ -11,7 +11,7 @@ void _init_options(ts_options_t *options)
 	options->version = 0;
 }
 
-void parse_cmdline_args(ts_options_t *options, int argc, char *argv[])
+void parse_cmdline_args(ts_options_t * options, int argc, char *argv[])
 {
 	int opt_char;
 	int option_index;
@@ -63,7 +63,7 @@ void parse_cmdline_args(ts_options_t *options, int argc, char *argv[])
 	}
 }
 
-void show_usage(FILE * s, char *argv0)
+void show_usage(FILE *s, char *argv0)
 {
 	fprintf(s, "Usage: %s [option...]\n", argv0);
 	fprintf(s, "\nOptions:\n");

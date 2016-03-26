@@ -13,6 +13,6 @@ typedef struct ts_options_ {
 } ts_options_t;
 
 void parse_cmdline_args(ts_options_t * options, int argc, char *argv[]);
-void show_usage(FILE * stream, char *argv0);
+void show_usage(FILE *stream, char *argv0);
 
 #endif /* TS_OPTIONS_H */
