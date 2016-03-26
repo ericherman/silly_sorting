@@ -8,20 +8,20 @@
 #include "silly_sorts.h"
 
 #define NUM_FUNCS 4
-typedef struct sort_func_t_ {
+struct sort_func_s {
 	const char *name;
 	void (*sort_func) (int *elements, size_t num_elements);
-} sort_func_t;
+};
 
 int main(int argc, char *argv[])
 {
 	int *array, *vals;
-	sort_func_t sort_funcs[NUM_FUNCS];
+	struct sort_func_s sort_funcs[NUM_FUNCS];
 	int j, last, negate, sorted;
 	unsigned int i;
 	clock_t start, end;
 	double elapsed;
-	ts_options_t options;
+	ts_options options;
 
 	parse_cmdline_args(&options, argc, argv);
 

@@ -29,6 +29,10 @@ tidy:
 	$(LINDENT) \
 		-T FILE \
 		-T size_t \
+		-T ts_options \
+		-T int_list \
+		-T int_list_head \
+		-T pthread_push_context \
 		*.h *.c
 
 clean:
