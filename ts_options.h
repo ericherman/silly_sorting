@@ -1,5 +1,5 @@
-#ifndef _TS_OPTIONS_H_
-#define _TS_OPTIONS_H_
+#ifndef TS_OPTIONS_H
+#define TS_OPTIONS_H
 
 #include <stdio.h>
 #include <stdint.h>
@@ -15,4 +15,4 @@ typedef struct ts_options_ {
 void parse_cmdline_args(ts_options_t * options, int argc, char *argv[]);
 void show_usage(FILE * stream, char *argv0);
 
-#endif /* _TS_OPTIONS_H_ */
+#endif /* TS_OPTIONS_H */
