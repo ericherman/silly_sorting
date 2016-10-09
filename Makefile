@@ -10,7 +10,8 @@ OPTIMIZER_CFLAGS=-ggdb -O0
 
 CFLAGS=$(STD_CFLAGS) $(OPTIMIZER_CFLAGS) $(NOISY_CFLAGS)
 
-LDFLAGS=-pthread
+LDFLAGS=
+LDADD=-pthread
 
 OBJECTS=$(SOURCES:.c=.o)
 
@@ -20,10 +21,14 @@ LINDENT=indent -npro -kr -i8 -ts8 -sob -l80 -ss -ncs -cp1 -il0
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) \
+		$(LDFLAGS) \
+		$(OBJECTS) -o $@ \
+		$(LDADD)
 
 .c.o:
-	$(CC) -c $(CFLAGS) $^ -o $@
+	$(CC) -c $(CFLAGS) \
+		$^ -o $@
 
 tidy:
 	$(LINDENT) \
