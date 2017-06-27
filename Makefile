@@ -6,9 +6,9 @@ SOURCES=test_sort.c ts_options.c qsort_ints.c silly_sorts.c
 CC=gcc
 STD_CFLAGS=-std=c89
 NOISY_CFLAGS=-Werror -Wall -Wextra -pedantic
-OPTIMIZER_CFLAGS=-ggdb -O0
+OPTIMIZER_CFLAGS=-ggdb -O2 -fomit-frame-pointer
 
-CFLAGS=$(STD_CFLAGS) $(OPTIMIZER_CFLAGS) $(NOISY_CFLAGS)
+CFLAGS=$(STD_CFLAGS) $(OPTIMIZER_CFLAGS) $(NOISY_CFLAGS) -pipe
 
 LDFLAGS=
 LDADD=-pthread
