@@ -18,6 +18,11 @@ OBJECTS=$(SOURCES:.c=.o)
 # extracted from https://github.com/torvalds/linux/blob/master/scripts/Lindent
 LINDENT=indent -npro -kr -i8 -ts8 -sob -l80 -ss -ncs -cp1 -il0
 
+# $@ : target label
+# $< : the first prerequisite after the colon
+# $^ : all of the prerequisite files
+# $* : wildcard matched part
+
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
