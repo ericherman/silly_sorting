@@ -21,7 +21,7 @@
 #include <getopt.h>		/* if you don't hate getopt, you should */
 #include <stdlib.h>
 
-void _init_options(ts_options *options)
+static void z_init_options(ts_options *options)
 {
 	options->num_elements = 4;
 	options->element_max_value = 12;
@@ -39,15 +39,15 @@ void parse_cmdline_args(ts_options *options, int argc, char *argv[])
 	const char *optstring = "h::v::e::m::n::";
 
 	struct option long_options[] = {
-		{"help", no_argument, 0, 'h'},
-		{"version", no_argument, 0, 'v'},
-		{"elements", optional_argument, 0, 'e'},
-		{"max_val", optional_argument, 0, 'm'},
-		{"negate", optional_argument, 0, 'n'},
-		{0, 0, 0, 0}
+		{ "help", no_argument, 0, 'h' },
+		{ "version", no_argument, 0, 'v' },
+		{ "elements", optional_argument, 0, 'e' },
+		{ "max_val", optional_argument, 0, 'm' },
+		{ "negate", optional_argument, 0, 'n' },
+		{ 0, 0, 0, 0 }
 	};
 
-	_init_options(options);
+	z_init_options(options);
 
 	while (1) {
 		option_index = 0;

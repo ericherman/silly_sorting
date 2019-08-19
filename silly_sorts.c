@@ -44,7 +44,7 @@ typedef struct pthread_push_context_s {
 	unsigned int sleep_time;
 } pthread_push_context;
 
-void *_pthread_push(void *arg)
+static void *z_pthread_push(void *arg)
 {
 	pthread_push_context *ctx;
 	int_list_head *head;
@@ -81,7 +81,8 @@ void *_pthread_push(void *arg)
 	return NULL;
 }
 
-void _sleep_reorder(enum reorder order, int *elements, size_t num_elements)
+static void z_sleep_reorder(enum reorder order, int *elements,
+			    size_t num_elements)
 {
 	size_t i;
 	int rv;
@@ -142,7 +143,7 @@ void _sleep_reorder(enum reorder order, int *elements, size_t num_elements)
 			break;
 		}
 
-		rv = pthread_create(&(threads[i]), NULL, _pthread_push, ctx);
+		rv = pthread_create(&(threads[i]), NULL, z_pthread_push, ctx);
 		if (rv) {
 			fprintf(stderr, "pthread_create() returned: %d\n", rv);
 			exit(EXIT_FAILURE);
@@ -186,15 +187,15 @@ void _sleep_reorder(enum reorder order, int *elements, size_t num_elements)
 
 void sleep_sort(int *elements, size_t num_elements)
 {
-	_sleep_reorder(SORT, elements, num_elements);
+	z_sleep_reorder(SORT, elements, num_elements);
 }
 
-void _sleep_shuffle(int *elements, size_t num_elements)
+static void z_sleep_shuffle(int *elements, size_t num_elements)
 {
-	_sleep_reorder(SHUFFLE, elements, num_elements);
+	z_sleep_reorder(SHUFFLE, elements, num_elements);
 }
 
-void _shuffle(int *elements, size_t num_elements)
+static void z_shuffle(int *elements, size_t num_elements)
 {
 	size_t i, pos;
 	int swap;
@@ -206,8 +207,9 @@ void _shuffle(int *elements, size_t num_elements)
 	}
 }
 
-void _random_sort(void (*shuffle_func) (int *elements, size_t num_elements),
-		  int *elements, size_t num_elements)
+static void
+z_random_sort(void (*shuffle_func)(int *elements, size_t num_elements),
+	      int *elements, size_t num_elements)
 {
 	size_t i;
 	int last;
@@ -228,10 +230,10 @@ void _random_sort(void (*shuffle_func) (int *elements, size_t num_elements),
 
 void random_sort(int *elements, size_t num_elements)
 {
-	_random_sort(_shuffle, elements, num_elements);
+	z_random_sort(z_shuffle, elements, num_elements);
 }
 
 void random_sleep_sort(int *elements, size_t num_elements)
 {
-	_random_sort(_sleep_shuffle, elements, num_elements);
+	z_random_sort(z_sleep_shuffle, elements, num_elements);
 }
