@@ -29,7 +29,7 @@
 #define NUM_FUNCS 4
 struct sort_func_s {
 	const char *name;
-	void (*sort_func) (int *elements, size_t num_elements);
+	void (*sort_func)(int *elements, size_t num_elements);
 };
 
 int main(int argc, char *argv[])
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	unsigned int i;
 	clock_t start, end;
 	double elapsed;
-	ts_options options;
+	struct ts_options options;
 
 	parse_cmdline_args(&options, argc, argv);
 

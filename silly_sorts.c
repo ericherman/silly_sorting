@@ -28,29 +28,30 @@
 
 enum reorder { SORT, SHUFFLE };
 
-typedef struct int_list_s {
-	struct int_list_s *next_node;
+struct int_list {
+	struct int_list *next_node;
 	int val;
-} int_list;
+};
 
-typedef struct int_list_head_s {
-	int_list *first_node;
-} int_list_head;
+struct int_list_head {
+	struct int_list *first_node;
+};
 
-typedef struct pthread_push_context_s {
-	int_list_head *head;
+struct pthread_push_context {
+	struct int_list_head *head;
 	pthread_mutex_t *mutex;
 	int val;
 	unsigned int sleep_time;
-} pthread_push_context;
+};
 
 static void *z_pthread_push(void *arg)
 {
-	pthread_push_context *ctx;
-	int_list_head *head;
-	int_list *node;
+	struct pthread_push_context *ctx;
+	struct int_list_head *head;
+	struct int_list *node;
+	size_t size;
 
-	ctx = (pthread_push_context *)arg;
+	ctx = (struct pthread_push_context *)arg;
 
 	head = ctx->head;
 
@@ -58,7 +59,8 @@ static void *z_pthread_push(void *arg)
 
 	pthread_mutex_lock(ctx->mutex);
 	if (head->first_node == NULL) {
-		node = (int_list *)malloc(sizeof(int_list));
+		size = sizeof(struct int_list);
+		node = (struct int_list *)malloc(size);
 		node->next_node = NULL;
 
 		head->first_node = node;
@@ -67,7 +69,8 @@ static void *z_pthread_push(void *arg)
 		while (node->next_node) {
 			node = node->next_node;
 		}
-		node->next_node = (int_list *)malloc(sizeof(int_list));
+		size = sizeof(struct int_list);
+		node->next_node = (struct int_list *)malloc(size);
 		node->next_node->next_node = NULL;
 
 		node = node->next_node;
@@ -86,10 +89,10 @@ static void z_sleep_reorder(enum reorder order, int *elements,
 {
 	size_t i;
 	int rv;
-	pthread_push_context *ctx;
+	struct pthread_push_context *ctx;
 	pthread_t *threads;
-	int_list_head *pos_list, *neg_list;
-	int_list *node;
+	struct int_list_head *pos_list, *neg_list;
+	struct int_list *node;
 	pthread_mutex_t *mutex;
 	const pthread_mutexattr_t *attr = NULL;
 
@@ -98,13 +101,13 @@ static void z_sleep_reorder(enum reorder order, int *elements,
 		exit(EXIT_FAILURE);
 	}
 
-	pos_list = (int_list_head *)malloc(sizeof(int_list_head));
+	pos_list = (struct int_list_head *)malloc(sizeof(struct int_list_head));
 	if (!pos_list) {
 		exit(EXIT_FAILURE);
 	}
 	pos_list->first_node = NULL;
 
-	neg_list = (int_list_head *)malloc(sizeof(int_list_head));
+	neg_list = (struct int_list_head *)malloc(sizeof(struct int_list_head));
 	if (!neg_list) {
 		exit(EXIT_FAILURE);
 	}
@@ -121,8 +124,8 @@ static void z_sleep_reorder(enum reorder order, int *elements,
 	}
 
 	for (i = 0; i < num_elements; i++) {
-		ctx = (pthread_push_context *)
-		    malloc(sizeof(pthread_push_context));
+		ctx = (struct pthread_push_context *)
+		    malloc(sizeof(struct pthread_push_context));
 		ctx->mutex = mutex;
 
 		ctx->val = elements[i];

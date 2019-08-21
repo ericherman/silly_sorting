@@ -21,7 +21,7 @@
 #include <getopt.h>		/* if you don't hate getopt, you should */
 #include <stdlib.h>
 
-static void z_init_options(ts_options *options)
+static void z_init_options(struct ts_options *options)
 {
 	options->num_elements = 4;
 	options->element_max_value = 12;
@@ -30,7 +30,7 @@ static void z_init_options(ts_options *options)
 	options->version = 0;
 }
 
-void parse_cmdline_args(ts_options *options, int argc, char *argv[])
+void parse_cmdline_args(struct ts_options *options, int argc, char *argv[])
 {
 	int opt_char;
 	int option_index;
