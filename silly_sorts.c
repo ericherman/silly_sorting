@@ -44,6 +44,19 @@ struct pthread_push_context {
 	unsigned int sleep_time;
 };
 
+void *malloc_or_die(FILE *log, char *filename, int lineno, size_t size)
+{
+	void *ptr = malloc(size);
+	if (!ptr) {
+		fprintf(log, "%s:%d: failed to malloc(%lu)\n",
+			filename, lineno, (unsigned long)size);
+		exit(EXIT_FAILURE);
+	}
+	return ptr;
+}
+
+#define Malloc_or_die(size) malloc_or_die(stderr, __FILE__, __LINE__, size)
+
 static void *z_pthread_push(void *arg)
 {
 	struct pthread_push_context *ctx;
@@ -60,7 +73,7 @@ static void *z_pthread_push(void *arg)
 	pthread_mutex_lock(ctx->mutex);
 	if (head->first_node == NULL) {
 		size = sizeof(struct int_list);
-		node = (struct int_list *)malloc(size);
+		node = (struct int_list *)Malloc_or_die(size);
 		node->next_node = NULL;
 
 		head->first_node = node;
@@ -70,7 +83,7 @@ static void *z_pthread_push(void *arg)
 			node = node->next_node;
 		}
 		size = sizeof(struct int_list);
-		node->next_node = (struct int_list *)malloc(size);
+		node->next_node = (struct int_list *)Malloc_or_die(size);
 		node->next_node->next_node = NULL;
 
 		node = node->next_node;
@@ -87,7 +100,7 @@ static void *z_pthread_push(void *arg)
 static void z_sleep_reorder(enum reorder order, int *elements,
 			    size_t num_elements)
 {
-	size_t i;
+	size_t i, size;
 	int rv;
 	struct pthread_push_context *ctx;
 	pthread_t *threads;
@@ -96,27 +109,20 @@ static void z_sleep_reorder(enum reorder order, int *elements,
 	pthread_mutex_t *mutex;
 	const pthread_mutexattr_t *attr = NULL;
 
-	threads = (pthread_t *) malloc(num_elements * sizeof(pthread_t));
-	if (!threads) {
-		exit(EXIT_FAILURE);
-	}
+	size = num_elements * sizeof(pthread_t);
+	threads = (pthread_t *)Malloc_or_die(size);
 
-	pos_list = (struct int_list_head *)malloc(sizeof(struct int_list_head));
-	if (!pos_list) {
-		exit(EXIT_FAILURE);
-	}
+	size = sizeof(struct int_list_head);
+	pos_list = (struct int_list_head *)Malloc_or_die(size);
 	pos_list->first_node = NULL;
 
-	neg_list = (struct int_list_head *)malloc(sizeof(struct int_list_head));
-	if (!neg_list) {
-		exit(EXIT_FAILURE);
-	}
+	size = sizeof(struct int_list_head);
+	neg_list = (struct int_list_head *)Malloc_or_die(size);
 	neg_list->first_node = NULL;
 
-	mutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
-	if (!mutex) {
-		exit(EXIT_FAILURE);
-	}
+	size = sizeof(pthread_mutex_t);
+	mutex = (pthread_mutex_t *)Malloc_or_die(size);
+
 	rv = pthread_mutex_init(mutex, attr);
 	if (rv) {
 		fprintf(stderr, "pthread_mutex_init() returned: %d\n", rv);
@@ -124,8 +130,8 @@ static void z_sleep_reorder(enum reorder order, int *elements,
 	}
 
 	for (i = 0; i < num_elements; i++) {
-		ctx = (struct pthread_push_context *)
-		    malloc(sizeof(struct pthread_push_context));
+		size = sizeof(struct pthread_push_context);
+		ctx = (struct pthread_push_context *)Malloc_or_die(size);
 		ctx->mutex = mutex;
 
 		ctx->val = elements[i];

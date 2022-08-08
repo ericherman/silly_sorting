@@ -39,6 +39,8 @@ tidy:
 	$(LINDENT) \
 		-T FILE \
 		-T size_t \
+		-T pthread_t \
+		-T pthread_mutex_t \
 		-T ts_options \
 		-T int_list \
 		-T int_list_head \
